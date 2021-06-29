@@ -3,6 +3,7 @@ import random
 import discord
 from discord.ext import commands
 from dotenv import load_dotenv
+from database import DataAccess
 
 load_dotenv()
 TOKEN = os.getenv('DISCORD_TOKEN')
@@ -20,17 +21,21 @@ async def pensamento(ctx):
     if ctx.author == bot.user:
         return
 
-    quotes = {
-        'odeio pobres :gamer:(eu sei que n existe aqui :D é só um teste n ta pronto ainda)',
-        'Não tem problema você ser sulista, tipo, até tem, mas você precisar falar bah?',
-    }
+    db = DataAccess()
 
-    response = random.choice(quotes)
+    color_set = (0xff5733, 0x64ff33, 0x33ffe9,
+                 0x2bb675, 0xe8159e, 0xf4b4de, 0x7346f8)
+
+    quotes = db.get_all_quotes()
+
+    response = quotes[random.randint(0, 1)]
 
     embed = discord.Embed(title='Pensamento',
-                          description=f'{response}', color=discord.Color.blue())
+                          description=response['quote'], color=random.choice(color_set))
+    embed.set_author(name=response['author'], url='')
 
     await ctx.send(embed=embed)
+
 
 @bot.command(name='register')
 async def registrar(ctx, autor, frase):
@@ -38,4 +43,15 @@ async def registrar(ctx, autor, frase):
         return
 
 
-bot.run(TOKEN)
+@bot.event
+async def on_error(event, *args, **kwargs):
+    with open('err.txt', 'a') as f:
+        f.write(f'\nUnhandled message: {args[0]}')
+
+
+def main():
+    bot.run(TOKEN)
+
+
+if __name__ == '__main__':
+    main()
