@@ -7,6 +7,9 @@ from database import DataAccess
 
 load_dotenv()
 TOKEN = os.getenv('DISCORD_TOKEN')
+COLOR_SET = (0xff5733, 0x64ff33, 0x33ffe9,
+             0x2bb675, 0xe8159e, 0xf4b4de, 0x7346f8)
+
 
 bot = commands.Bot(command_prefix='?')
 
@@ -23,15 +26,12 @@ async def pensamento(ctx):
 
     db = DataAccess()
 
-    color_set = (0xff5733, 0x64ff33, 0x33ffe9,
-                 0x2bb675, 0xe8159e, 0xf4b4de, 0x7346f8)
+    quotes = list(db.get_all_quotes())
 
-    quotes = db.get_all_quotes()
-
-    response = quotes[random.randint(0, 1)]
+    response = random.choice(quotes)
 
     embed = discord.Embed(title='Pensamento',
-                          description=response['quote'], color=random.choice(color_set))
+                          description=response['quote'], color=random.choice(COLOR_SET))
     embed.set_author(name=response['author'], url='')
 
     await ctx.send(embed=embed)
@@ -41,6 +41,12 @@ async def pensamento(ctx):
 async def registrar(ctx, autor, frase):
     if ctx.author == bot.user:
         return
+
+
+
+@bot.command(name='test')
+async def test(ctx, arg):
+    await ctx.send(f'{arg=}')
 
 
 @bot.event
