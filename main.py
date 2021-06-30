@@ -19,29 +19,67 @@ async def on_ready():
     print('Ready :D')
 
 
-@bot.command(name='quote')
+@bot.command(name='pensamento', help='Frase iconica aleatoria')
 async def pensamento(ctx):
-    if ctx.author == bot.user:
-        return
+    try:
+        if ctx.author == bot.user:
+            return
 
-    db = DataAccess()
+        db = DataAccess()
 
-    quotes = list(db.get_all_quotes())
+        quotes = list(db.get_all_quotes())
 
-    response = random.choice(quotes)
+        response = random.choice(quotes)
 
-    embed = discord.Embed(title='Pensamento',
-                          description=response['quote'], color=random.choice(COLOR_SET))
-    embed.set_author(name=response['author'], url='')
+        embed = discord.Embed(title='Pensamento',
+                              description=response['quote'], color=random.choice(COLOR_SET))
+        embed.set_author(name=response['author'], url='')
 
-    await ctx.send(embed=embed)
+        await ctx.send(embed=embed)
+
+    except Exception as e:
+        on_error(e)
 
 
-@bot.command(name='register')
+@bot.command(name='autor', help='Paramentro: nome do autor. Listagem de frases desse autor')
+async def autor(ctx, autor: str):
+    try:
+        if ctx.author == bot.user:
+            return
+
+        db = DataAccess()
+        quotes = db.get_author_info(autor)
+
+        embed = discord.Embed(title="Frases de " + autor,
+                              color=random.choice(COLOR_SET))
+        embed.set_author(name=f'@{ctx.author}')
+
+        if quotes:
+            for quote in quotes:
+                embed.add_field(
+                    name=f"Id: {quote['public_id']}", value=quote['quote'], inline=False)
+
+        else:
+            embed.add_field(
+                name=f"Autor não possui nenhuma frase :/", 
+                value="Aproveite para salvar um lindo pensamento", inline=False
+            )
+
+        embed.set_footer(text="enjoy!")
+
+        await ctx.send(embed=embed)
+
+    except Exception as e:
+        embed = discord.Embed(title="Erro :C",
+                              color=0x000000)
+        print(e)
+        await ctx.send(embed=embed)
+
+
+@bot.command(name='registrar')
 async def registrar(ctx, autor, frase):
     if ctx.author == bot.user:
         return
-
 
 
 @bot.command(name='test')

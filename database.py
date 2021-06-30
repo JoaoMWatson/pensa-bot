@@ -13,5 +13,8 @@ class DataAccess:
 
 
     def get_all_quotes(self):
-        return self.db.pensamentos.find()
+        return list(self.db.pensamentos.find())
 
+
+    def get_author_info(self, author):
+        return list(self.db.pensamentos.find({'author':str(author)}))
