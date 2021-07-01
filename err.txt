@@ -1,0 +1,7 @@
+
+Unhandled message: Command raised an exception: TypeError: autor() missing 1 required positional argument: 'ctx'
+Unhandled message: Command raised an exception: TypeError: error() missing 1 required positional argument: 'ctx'
+Unhandled message: autor is a required argument that is missing. - timestamp: 2021-07-01 15:43:58.164705
+Unhandled message: autor is a required argument that is missing. - timestamp: 2021-07-01 15:45:41.136191
+Unhandled message: autor is a required argument that is missing. - timestamp: 2021-07-01 16:20:43.704998
+Unhandled message: autor is a required argument that is missing. - timestamp: 2021-07-01 16:23:52.806727

@@ -11,6 +11,8 @@ class DataAccess:
                          "@pensa-bot.dcwas.mongodb.net/pensamentos?retryWrites=true&w=majority")
     db = client.pensamentos
 
+    def __init__(self):
+        pass
 
     def get_all_quotes(self):
         return list(self.db.pensamentos.find())

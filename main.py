@@ -2,14 +2,16 @@ import os
 import random
 import discord
 from discord.ext import commands
+from discord.ext.commands.errors import MissingRequiredArgument
 from dotenv import load_dotenv
-from database import DataAccess
+from commands import Command
+from datetime import datetime
+
+TIME_NOW = datetime.now()
 
 load_dotenv()
 TOKEN = os.getenv('DISCORD_TOKEN')
-COLOR_SET = (0xff5733, 0x64ff33, 0x33ffe9,
-             0x2bb675, 0xe8159e, 0xf4b4de, 0x7346f8)
-
+command_funcs = Command()
 
 bot = commands.Bot(command_prefix='?')
 
@@ -25,55 +27,26 @@ async def pensamento(ctx):
         if ctx.author == bot.user:
             return
 
-        db = DataAccess()
+        message = command_funcs.pensamento()
 
-        quotes = list(db.get_all_quotes())
-
-        response = random.choice(quotes)
-
-        embed = discord.Embed(title='Pensamento',
-                              description=response['quote'], color=random.choice(COLOR_SET))
-        embed.set_author(name=response['author'], url='')
-
-        await ctx.send(embed=embed)
+        await ctx.send(embed=message)
 
     except Exception as e:
-        on_error(e)
+        print(e)
 
 
 @bot.command(name='autor', help='Paramentro: nome do autor. Listagem de frases desse autor')
-async def autor(ctx, autor: str):
+async def autor(ctx, autor: str = ""):
     try:
         if ctx.author == bot.user:
             return
 
-        db = DataAccess()
-        quotes = db.get_author_info(autor)
+        message = command_funcs.autor(ctx, autor=autor)
 
-        embed = discord.Embed(title="Frases de " + autor,
-                              color=random.choice(COLOR_SET))
-        embed.set_author(name=f'@{ctx.author}')
-
-        if quotes:
-            for quote in quotes:
-                embed.add_field(
-                    name=f"Id: {quote['public_id']}", value=quote['quote'], inline=False)
-
-        else:
-            embed.add_field(
-                name=f"Autor não possui nenhuma frase :/", 
-                value="Aproveite para salvar um lindo pensamento", inline=False
-            )
-
-        embed.set_footer(text="enjoy!")
-
-        await ctx.send(embed=embed)
+        await ctx.send(embed=message)
 
     except Exception as e:
-        embed = discord.Embed(title="Erro :C",
-                              color=0x000000)
         print(e)
-        await ctx.send(embed=embed)
 
 
 @bot.command(name='registrar')
@@ -88,9 +61,10 @@ async def test(ctx, arg):
 
 
 @bot.event
-async def on_error(event, *args, **kwargs):
+async def on_command_error(event, *args, **kwargs):
     with open('err.txt', 'a') as f:
-        f.write(f'\nUnhandled message: {args[0]}')
+        f.write(f'\nUnhandled message: {args[0]} - timestamp: {TIME_NOW}')
+    print(args)
 
 
 def main():
