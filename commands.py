@@ -17,20 +17,19 @@ class Command:
 
         response = random.choice(quotes)
 
-        embed = discord.Embed(title='Pensamento',
-                              description=response['quote'], color=random.choice(self._COLOR_SET))
+        embed = discord.Embed(title=f'Autor: '+ response['author'].capitalize(),
+                              description=f'"{response["quote"]}"', color=random.choice(self._COLOR_SET))
 
-        embed.set_author(name=response['author'], url='')
+        embed.set_author(name="Pensamento", url='')
 
         return embed
 
     def autor(self, ctx, autor):
         try:
-            quotes = self.db.get_author_info(autor)
+            quotes = self.db.get_author_info(str(autor).upper())
 
             embed = discord.Embed(title="Frases de " + autor,
                                   color=random.choice(self._COLOR_SET))
-            embed.set_author(name=f'@{ctx.author}')
 
             if quotes:
                 for quote in quotes:
@@ -48,3 +47,19 @@ class Command:
             return embed
         except Exception as e:
             print(e)
+
+    def registrar(self, ctx, autor, frase):
+        confirm = self.db.insert_new_quote(autor, frase)
+        if confirm:
+            embed_success = discord.Embed(
+                title=f'public_id: {confirm}', color=random.choice(self._COLOR_SET))
+            embed_success.set_author(name="Frase inserida com sucesso")
+            
+            return embed_success
+
+        else:
+            embed_error = discord.Embed(title="Tente novamente",
+                                        color=discord.Color.red)
+            embed_error.set_author(name="Erro ao inserir frase :/")
+
+            return embed_error

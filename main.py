@@ -28,7 +28,8 @@ async def pensamento(ctx):
             return
 
         message = command_funcs.pensamento()
-
+        
+        await ctx.channel.send(f"<@{ctx.author.id}>")
         await ctx.send(embed=message)
 
     except Exception as e:
@@ -43,16 +44,25 @@ async def autor(ctx, autor: str = ""):
 
         message = command_funcs.autor(ctx, autor=autor)
 
+        await ctx.channel.send(f"<@{ctx.author.id}>")
         await ctx.send(embed=message)
 
     except Exception as e:
         print(e)
 
 
-@bot.command(name='registrar')
-async def registrar(ctx, autor, frase):
-    if ctx.author == bot.user:
-        return
+@bot.command(name='registrar', help='Registra novo pensamento :D')
+async def registrar(ctx, frase, autor):
+    try:
+        if ctx.author == bot.user:
+            return
+
+        message = command_funcs.registrar(ctx, autor, frase)
+
+        await ctx.channel.send(f"<@{ctx.author.id}>")
+        await ctx.send(embed=message)
+    except Exception as e:
+        print(e)
 
 
 @bot.command(name='test')

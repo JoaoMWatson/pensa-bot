@@ -5,3 +5,4 @@ Unhandled message: autor is a required argument that is missing. - timestamp: 20
 Unhandled message: autor is a required argument that is missing. - timestamp: 2021-07-01 15:45:41.136191
 Unhandled message: autor is a required argument that is missing. - timestamp: 2021-07-01 16:20:43.704998
 Unhandled message: autor is a required argument that is missing. - timestamp: 2021-07-01 16:23:52.806727
+Unhandled message: Command "quote" is not found - timestamp: 2021-07-02 14:06:03.745233
