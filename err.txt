@@ -6,3 +6,18 @@ Unhandled message: autor is a required argument that is missing. - timestamp: 20
 Unhandled message: autor is a required argument that is missing. - timestamp: 2021-07-01 16:20:43.704998
 Unhandled message: autor is a required argument that is missing. - timestamp: 2021-07-01 16:23:52.806727
 Unhandled message: Command "quote" is not found - timestamp: 2021-07-02 14:06:03.745233
+Unhandled message: Command raised an exception: TypeError: int() argument must be a string, a bytes-like object or a number, not 'tuple' - timestamp: 2021-07-05 16:55:02.853505
+Unhandled message: Command raised an exception: TypeError: int() argument must be a string, a bytes-like object or a number, not 'tuple' - timestamp: 2021-07-05 16:56:32.297606
+Unhandled message: Command raised an exception: TypeError: int() argument must be a string, a bytes-like object or a number, not 'tuple' - timestamp: 2021-07-05 16:57:42.290367
+Unhandled message: Command raised an exception: TypeError: int() argument must be a string, a bytes-like object or a number, not 'tuple' - timestamp: 2021-07-05 16:58:05.738883
+Unhandled message: Command raised an exception: TypeError: 'NoneType' object is not iterable - timestamp: 2021-07-05 16:58:50.290110
+Unhandled message: Command raised an exception: HTTPException: 400 Bad Request (error code: 50006): Cannot send an empty message - timestamp: 2021-07-05 17:00:00.542055
+Unhandled message: Command "pensa" is not found - timestamp: 2021-07-05 17:00:00.542055
+Unhandled message: Command raised an exception: IndexError: tuple index out of range - timestamp: 2021-07-05 17:03:31.856292
+Unhandled message: Command raised an exception: TypeError: 'NoneType' object is not iterable - timestamp: 2021-07-05 17:04:16.415642
+Unhandled message: Command raised an exception: TypeError: 'NoneType' object is not iterable - timestamp: 2021-07-05 17:05:08.185230
+Unhandled message: Command raised an exception: TypeError: 'NoneType' object is not iterable - timestamp: 2021-07-05 17:05:42.578103
+Unhandled message: Command raised an exception: TypeError: pensamento() missing 1 required positional argument: 'id' - timestamp: 2021-07-05 17:08:13.921439
+Unhandled message: Command raised an exception: TypeError: 'NoneType' object is not iterable - timestamp: 2021-07-05 17:08:35.009225
+Unhandled message: Command "pensa" is not found - timestamp: 2021-07-05 17:08:35.009225
+Unhandled message: Command raised an exception: TypeError: 'NoneType' object is not iterable - timestamp: 2021-07-05 17:15:40.570950
