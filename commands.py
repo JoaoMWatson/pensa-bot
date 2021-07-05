@@ -8,16 +8,19 @@ class Command:
     db = DataAccess()
     _COLOR_SET = (0xff5733, 0x64ff33, 0x33ffe9,
                   0x2bb675, 0xe8159e, 0xf4b4de, 0x7346f8)
+    
 
     def __init__(self):
         pass
 
-    def pensamento(self):
-        quotes = list(self.db.get_all_quotes())
+    def pensa(self, id=None):
+        if id == None:
+            _last_id = self.db._get_last_id()
+            id = random.randint(1, _last_id)
+        
+        response = self.db.get_by_id(int(id))[0]
 
-        response = random.choice(quotes)
-
-        embed = discord.Embed(title=f'Autor: '+ response['author'].capitalize(),
+        embed = discord.Embed(title=f'Autor: ' + response['author'].capitalize(),
                               description=f'"{response["quote"]}"', color=random.choice(self._COLOR_SET))
 
         embed.set_author(name="Pensamento", url='')
@@ -54,7 +57,7 @@ class Command:
             embed_success = discord.Embed(
                 title=f'public_id: {confirm}', color=random.choice(self._COLOR_SET))
             embed_success.set_author(name="Frase inserida com sucesso")
-            
+
             return embed_success
 
         else:

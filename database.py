@@ -14,6 +14,9 @@ class DataAccess:
     def __init__(self):
         pass
 
+    def get_by_id(self, id):
+        return list(self.db.pensamentos.find({'public_id': id}))
+
     def get_all_quotes(self):
         return list(self.db.pensamentos.find())
 
@@ -21,9 +24,10 @@ class DataAccess:
         return list(self.db.pensamentos.find({'author': str(author)}))
 
     def _get_last_id(self):
-        last = list(self.db.pensamentos.find().sort('public_id', DESCENDING).limit(1))[0]['public_id']
-        return last
-    
+        last = list(self.db.pensamentos.find().sort(
+            'public_id', DESCENDING).limit(1))[0]['public_id']
+        return int(last)
+
     def insert_new_quote(self, autor, frase):
         public_id = self._get_last_id() + 1
         formated_autor = str(autor).strip().upper()
@@ -33,5 +37,6 @@ class DataAccess:
                'quote': formated_quote}
 
         insertion = self.db.pensamentos.insert_one(row)
-        
+
         return public_id
+
