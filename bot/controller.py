@@ -1,23 +1,22 @@
 import random
 import discord
 from discord.ext.commands.errors import MissingRequiredArgument
-from database import DataAccess
 
 
 class Command:
-    db = DataAccess()
+
     _COLOR_SET = (0xff5733, 0x64ff33, 0x33ffe9,
                   0x2bb675, 0xe8159e, 0xf4b4de, 0x7346f8)
-    
 
-    def __init__(self):
+    def __init__(self, dataAccess):
+        self.db = dataAccess
         pass
 
     def pensa(self, id=None):
         if id == None:
-            _last_id = self.db._get_last_id()
+            _last_id = self.db.get_last_id()
             id = random.randint(1, _last_id)
-        
+
         response = self.db.get_by_id(int(id))[0]
 
         embed = discord.Embed(title=f'Autor: ' + response['author'].capitalize(),
@@ -62,7 +61,13 @@ class Command:
 
         else:
             embed_error = discord.Embed(title="Tente novamente",
-                                        color=discord.Color.red)
+                                        color=0xFF000)
             embed_error.set_author(name="Erro ao inserir frase :/")
 
             return embed_error
+        
+    def error_embed(self, error):
+        embed = discord.Embed(title=error, color=0xFF000)
+        embed.set_author(name="digite *?help* para ver a lista de comandos")
+        
+        return embed
