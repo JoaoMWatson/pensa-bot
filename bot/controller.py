@@ -5,8 +5,9 @@ from discord.ext.commands.errors import MissingRequiredArgument
 
 class Command:
 
-    _COLOR_SET = (0xff5733, 0x64ff33, 0x33ffe9,
-                  0x2bb675, 0xe8159e, 0xf4b4de, 0x7346f8)
+    _COLOR_SET = (0x64ff33, 0x33ffe9,
+                  0x2bb675, 0xe8159e, 
+                  0xf4b4de, 0x7346f8)
 
     def __init__(self, dataAccess):
         self.db = dataAccess
@@ -26,7 +27,7 @@ class Command:
 
         return embed
 
-    def autor(self, ctx, autor):
+    def autor(self, autor):
         try:
             quotes = self.db.get_author_info(str(autor).upper())
 
@@ -50,7 +51,7 @@ class Command:
         except Exception as e:
             print(e)
 
-    def registrar(self, ctx, autor, frase):
+    def registrar(self, autor, frase):
         confirm = self.db.insert_new_quote(autor, frase)
         if confirm:
             embed_success = discord.Embed(
@@ -65,9 +66,9 @@ class Command:
             embed_error.set_author(name="Erro ao inserir frase :/")
 
             return embed_error
-        
+
     def error_embed(self, error):
         embed = discord.Embed(title=error, color=0xFF000)
         embed.set_author(name="digite *?help* para ver a lista de comandos")
-        
+
         return embed
