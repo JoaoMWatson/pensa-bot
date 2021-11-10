@@ -35,9 +35,11 @@ class PensaBot(commands.Bot):
             @self.command(name='pensa', help='Frase aleatoria. Parametro<opt>: Frase respectiva ao id :D')
             async def pensa(ctx, pensamento_id=None):
                 try:
+                    print("chegou aqui - func pensa :D")
                     commands = self.command_injection(guild=ctx.message.guild.id)
 
                     if pensamento_id is None:
+                        print("chegou if parametro None")
                         message = commands.pensa()
 
                     elif pensamento_id is not None:
@@ -55,11 +57,13 @@ class PensaBot(commands.Bot):
                     await self.send_messages(message, ctx)
 
             @self.command(name='pensador', help='Listagem de frases desse autor. Parametro: nome do autor. ;)')
-            async def pensador(ctx, autor: str = ""):
+            async def pensador(ctx, autor=None):
                 try:
+                    print(f"chegou aqui - func pensador :D {autor}")
+                    
                     commands = self.command_injection(guild=ctx.message.guild.id)
 
-                    message = commands.autor(ctx, autor=autor)
+                    message = commands.autor(autor=autor)
 
                     await self.send_messages(message, ctx)
                 except CommandNotFound:
@@ -70,29 +74,33 @@ class PensaBot(commands.Bot):
                 except MissingRequiredArgument:
                     message = commands.error_embed(
                         error="Falta algum parametro :C")
-                    await self.send_messages(message, ctx)
+                    await self.send_messages(message, ctx) 
 
             @self.command(name='pensaram', help='Registra novo pensamento. Parametro: "frase" "autor"')
             async def pensaram(ctx, frase, autor):
+                print(f"chegou aqui - func pensaram :D {frase} {autor}")
 
                 commands = self.command_injection(guild=ctx.message.guild.id)
-                message = commands.registrar(ctx, autor, frase)
+                message = commands.registrar(autor, frase)
 
                 await self.send_messages(message, ctx)
 
             @self.event
             async def on_command_error(ctx, error):
                 commands = self.command_injection(guild=ctx.message.guild.id)
-
+                print(error)
                 if error == CommandNotFound:
                     message = commands.error_embed(
                         error="Comando não encontrado :/")
                     await self.send_messages(message, ctx)
 
+
                 if error == MissingRequiredArgument:
                     message = commands.error_embed(
                         error="Falta algum parametro :C")
                     await self.send_messages(message, ctx)
+
+                    
         except Exception as e:
             print(e)
 

@@ -14,6 +14,7 @@ class Command:
         pass
 
     def pensa(self, id=None):
+        print("no controller pensa")
         if id == None:
             _last_id = self.db.get_last_id()
             id = random.randint(1, _last_id)
@@ -24,7 +25,7 @@ class Command:
                               description=f'"{response["quote"]}"', color=random.choice(self._COLOR_SET))
 
         embed.set_author(name="Pensamento", url='')
-
+        print(f'{embed=}')
         return embed
 
     def autor(self, autor):
@@ -55,8 +56,8 @@ class Command:
         confirm = self.db.insert_new_quote(autor, frase)
         if confirm:
             embed_success = discord.Embed(
-                title=f'public_id: {confirm}', color=random.choice(self._COLOR_SET))
-            embed_success.set_author(name="Frase inserida com sucesso")
+                title="Frase inserida com sucesso", color=random.choice(self._COLOR_SET))
+            embed_success.set_author(name=f'ID: {confirm}')
 
             return embed_success
 
