@@ -6,7 +6,7 @@ from discord.ext.commands.errors import MissingRequiredArgument
 class Command:
 
     _COLOR_SET = (0x64ff33, 0x33ffe9,
-                  0x2bb675, 0xe8159e, 
+                  0x2bb675, 0xe8159e,
                   0xf4b4de, 0x7346f8)
 
     def __init__(self, dataAccess):
@@ -14,7 +14,6 @@ class Command:
         pass
 
     def pensa(self, id=None):
-        print("no controller pensa")
         if id == None:
             _last_id = self.db.get_last_id()
             id = random.randint(1, _last_id)
