@@ -6,7 +6,7 @@ from discord.ext.commands.errors import MissingRequiredArgument
 class Command:
 
     _COLOR_SET = (0x64ff33, 0x33ffe9,
-                  0x2bb675, 0xe8159e, 
+                  0x2bb675, 0xe8159e,
                   0xf4b4de, 0x7346f8)
 
     def __init__(self, dataAccess):
@@ -24,7 +24,7 @@ class Command:
                               description=f'"{response["quote"]}"', color=random.choice(self._COLOR_SET))
 
         embed.set_author(name="Pensamento", url='')
-
+        print(f'{embed=}')
         return embed
 
     def autor(self, autor):
@@ -55,8 +55,8 @@ class Command:
         confirm = self.db.insert_new_quote(autor, frase)
         if confirm:
             embed_success = discord.Embed(
-                title=f'public_id: {confirm}', color=random.choice(self._COLOR_SET))
-            embed_success.set_author(name="Frase inserida com sucesso")
+                title="Frase inserida com sucesso", color=random.choice(self._COLOR_SET))
+            embed_success.set_author(name=f'ID: {confirm}')
 
             return embed_success
 

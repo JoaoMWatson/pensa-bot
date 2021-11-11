@@ -7,10 +7,10 @@ PASSWORD = os.getenv('MONGO_PASSWORD')
 
 
 class DataAccess:
-    client = MongoClient("mongodb+srv://discordbot:"+PASSWORD +
-                         "@pensa-bot.dcwas.mongodb.net/pensamentos?retryWrites=true&w=majority").pensamentos
+    client = MongoClient(
+        "mongodb+srv://discordbot:{}@pensa-bot.dcwas.mongodb.net/myFirstDatabase?retryWrites=true&w=majority".format(PASSWORD)).pensamentos
 
-    def __init__(self, guild):
+    def __init__(self, guild: str):
         if guild == 798277362097192990:
             self.db = self.client['pensamentos']
         else:
