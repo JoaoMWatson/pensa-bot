@@ -10,20 +10,20 @@ class DataAccess:
     client = MongoClient(
         "mongodb+srv://discordbot:{}@pensa-bot.dcwas.mongodb.net/myFirstDatabase?retryWrites=true&w=majority".format(PASSWORD)).pensamentos
 
-    def __init__(self, guild: str):
-        if guild == 798277362097192990:
-            self.db = self.client['pensamentos']
-        else:
-            self.db = self.client[str(guild)]
+    def __init__(self, guild_id: str):
+        self.db = self.client['quotes']
+        self.guild_id = guild_id
 
     def get_all_quotes(self):
-        return list(self.db.find())
+        return list(self.db.find({'guild': str(self.guild_id)}))
 
     def get_by_id(self, id):
-        return list(self.db.find({'public_id': id}))
+        return list(self.db.find({'public_id': id,
+                                  'guild': str(self.guild_id)}))
 
     def get_author_info(self, author):
-        return list(self.db.find({'author': str(author)}))
+        return list(self.db.find({'author': str(author),
+                                  'guild': str(self.guild_id)}))
 
     def get_last_id(self):
         last = list(self.db.find().sort(
@@ -37,8 +37,9 @@ class DataAccess:
 
         row = {'public_id': public_id,
                'author': formated_autor,
-               'quote': formated_quote}
+               'quote': formated_quote,
+               'guild': str(self.guild_id)}
 
-        insertion = self.db.insert_one(row)
+        self.db.insert_one(row)
 
         return public_id
