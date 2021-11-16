@@ -15,7 +15,6 @@ TOKEN = os.getenv('DISCORD_TOKEN')
 
 
 class PensaBot(commands.Bot):
-    guild_id = None
 
     def __init__(self, command_prefix, self_bot):
         commands.Bot.__init__(
@@ -32,16 +31,17 @@ class PensaBot(commands.Bot):
         controller_functions = Controller(
             dataAccess=database.DataAccess(guild_id))
         return controller_functions
-    
-    def error_handler(self, command, error):
+
+    async def error_handler(self, command, error, ctx):
         with open('err.log', 'a') as f:
-            f.write(f"Erro no comando '{command}' - Erro: {error} - timestamp: {TIME_NOW}\n")
+            f.write(
+                f"Erro no comando '{command}' - Erro: {error} - timestamp: {TIME_NOW}\n")
 
         message = self.controller.error_embed(
             error="Cometemos um erro :/ - Contate algum ADM")
-        
-        return message
-        
+
+        await self.send_messages(message, ctx)
+
     def add_event(self):
         @self.event
         async def on_ready():
@@ -72,52 +72,52 @@ class PensaBot(commands.Bot):
                 await self.send_messages(message, ctx)
 
     def add_commands(self):
-        try:
-            @self.command(name='id', help='Comando de configuração para melhor uso do bot')
-            async def getguild(ctx):
-                guild_id = ctx.message.guild.id
-                self.controller = self.controller_injection(guild_id)
+        @self.command(name='id', help='Comando de configuração para melhor uso do bot')
+        async def getguild(ctx):
+            guild_id = ctx.message.guild.id
+            self.controller = self.controller_injection(guild_id)
 
-                await ctx.channel.send(f"<@{ctx.author.id}>")
-                await ctx.channel.send("Agora o bot funcionara normalmente. Aproveite!!")
+            await ctx.channel.send(f"<@{ctx.author.id}>")
+            await ctx.channel.send("Agora o bot funcionara normalmente. Aproveite!!")
 
-            @self.command(name='pensa', help='Frase aleatoria. Parametro<opt>: Frase respectiva ao id :D')
-            async def pensa(ctx, pensamento_id=None):
-                try:
-                    if pensamento_id is None:
-                        message = self.controller.pensa()
-                    elif pensamento_id is not None:
-                        message = self.controller.pensa(pensamento_id)
+        @self.command(name='pensa', help='Frase aleatoria. Parametro<opt>: Frase respectiva ao id :D')
+        async def pensa(ctx, pensamento_id=None):
+            try:
+                if pensamento_id is None:
+                    message = self.controller.pensa()
+                elif pensamento_id is not None:
+                    message = self.controller.pensa(pensamento_id)
 
-                    await self.send_messages(message, ctx)
+                await self.send_messages(message, ctx)
 
-                except Exception as e:
-                    self.error_handler('pensa', e)
-                    await self.send_messages(message, ctx)
+            except Exception as e:
+                raise(self.error_handler('pensa', e, ctx))
 
+        @self.command(name='pensador', help='Listagem de frases desse autor. Parametro: nome do autor. ;)')
+        async def pensador(ctx, autor=None):
+            try:
+                message = self.controller.pensador(autor=autor)
+                await self.send_messages(message, ctx)
 
-            @self.command(name='pensador', help='Listagem de frases desse autor. Parametro: nome do autor. ;)')
-            async def pensador(ctx, autor=None):
-                try:
-                    message = self.controller.pensador(autor=autor)
-                    await self.send_messages(message, ctx)
+            except Exception as e:
+                raise(self.error_handler('pensador', e, ctx))
 
-                except Exception as e:
-                    self.error_handler('pensador', e)
-                    await self.send_messages(message, ctx)
+        @self.command(name='pensaram', help='Registra novo pensamento. Parametro: "frase" "autor"')
+        async def pensaram(ctx, frase, autor):
+            try:
+                message = self.controller.pensaram(autor, frase)
+                await self.send_messages(message, ctx)
 
-            @self.command(name='pensaram', help='Registra novo pensamento. Parametro: "frase" "autor"')
-            async def pensaram(ctx, frase, autor):
-                try:
-                    message = self.controller.pensaram(autor, frase)
-                    await self.send_messages(message, ctx)
+            except Exception as e:
+                raise(self.error_handler('pensaram', e, ctx))
 
-                except Exception as e:
-                    self.error_handler('pensaram', e)
-                    await self.send_messages(message, ctx)
+        @self.command(name='sophia', help='Dona de todo universo')
+        async def sophia(ctx):
+            try:
+                await ctx.channel.send("Dona de tudo rainha da sabedoria e conhecimendo do universo, ser todo poderoso e divino", ctx)
 
-        except Exception as e:
-            print(e)
+            except Exception as e:
+                raise(self.error_handler('pensaram', e, ctx))
 
 
 def main():

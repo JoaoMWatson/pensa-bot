@@ -10,7 +10,6 @@ class Controller:
 
     def __init__(self, dataAccess):
         self.db = dataAccess
-        pass
 
     def pensa(self, id=None):
         if id == None:
