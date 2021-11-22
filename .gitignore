@@ -4,7 +4,9 @@
 /.env/
 *.env
 .env
-err.txt
+err.log
+/err.log
+err.log/
 __pycache__
 /__pycache__
 /__pycache__/
