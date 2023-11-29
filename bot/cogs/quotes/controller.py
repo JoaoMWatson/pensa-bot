@@ -1,11 +1,10 @@
 import random
+
 import discord
 
 
 class Controller:
-    _COLOR_SET = (0x64ff33, 0x33ffe9,
-                  0x2bb675, 0xe8159e,
-                  0xf4b4de, 0x7346f8)
+    _COLOR_SET = (0x64FF33, 0x33FFE9, 0x2BB675, 0xE8159E, 0xF4B4DE, 0x7346F8)
 
     def __init__(self, dataAccess):
         self.db = dataAccess
@@ -17,9 +16,12 @@ class Controller:
 
         response = self.db.get_by_id(int(id))[0]
 
-        embed = discord.Embed(title=f'Autor: ' + response['author'].capitalize(),
-                              description=f'"{response["quote"]}"', color=random.choice(self._COLOR_SET))
-        embed.set_author(name="Pensamento", url='')
+        embed = discord.Embed(
+            title=f'Autor: ' + response['author'].capitalize(),
+            description=f'"{response["quote"]}"',
+            color=random.choice(self._COLOR_SET),
+        )
+        embed.set_author(name='Pensamento', url='')
 
         return embed
 
@@ -27,17 +29,23 @@ class Controller:
         try:
             quotes = self.db.get_author_info(str(autor).upper())
 
-            embed = discord.Embed(title="Frases de " + autor,
-                                  color=random.choice(self._COLOR_SET))
+            embed = discord.Embed(
+                title='Frases de ' + autor,
+                color=random.choice(self._COLOR_SET),
+            )
 
             if quotes:
                 for quote in quotes:
                     embed.add_field(
-                        name=f"Id: {quote['public_id']}", value=quote['quote'], inline=False)
+                        name=f"Id: {quote['public_id']}",
+                        value=quote['quote'],
+                        inline=False,
+                    )
             else:
                 embed.add_field(
-                    name=f"Autor não possui nenhuma frase :/",
-                    value="Aproveite para salvar um lindo pensamento", inline=False
+                    name=f'Autor não possui nenhuma frase :/',
+                    value='Aproveite para salvar um lindo pensamento',
+                    inline=False,
                 )
 
             return embed
@@ -48,20 +56,21 @@ class Controller:
         confirm = self.db.insert_new_quote(autor, frase)
         if confirm:
             embed_success = discord.Embed(
-                title="Frase inserida com sucesso", color=random.choice(self._COLOR_SET))
+                title='Frase inserida com sucesso',
+                color=random.choice(self._COLOR_SET),
+            )
             embed_success.set_author(name=f'ID: {confirm}')
 
             return embed_success
 
         else:
-            embed_error = discord.Embed(title="Tente novamente",
-                                        color=0xFF000)
-            embed_error.set_author(name="Erro ao inserir frase :/")
+            embed_error = discord.Embed(title='Tente novamente', color=0xFF000)
+            embed_error.set_author(name='Erro ao inserir frase :/')
 
             return embed_error
 
     def error_embed(self, error):
         embed = discord.Embed(title=error, color=0xFF000)
-        embed.set_author(name="digite *?help* para ver a lista de comandos")
+        embed.set_author(name='digite *?help* para ver a lista de comandos')
 
         return embed

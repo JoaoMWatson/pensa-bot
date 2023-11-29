@@ -1,70 +1,89 @@
-import os
 # import bot.database as database
-
+import os
 from datetime import datetime
-from dotenv import load_dotenv
-from discord.utils import find
-from discord.ext import commands
-from bot.cogs.quotes import Quote
-from discord.ext.commands.errors import CommandNotFound, MissingRequiredArgument
 
-load_dotenv()
+from discord import Intents
+from discord.ext import commands
+from discord.ext.commands.errors import (CommandNotFound,
+                                         MissingRequiredArgument)
+from discord.utils import find
+
+from bot.cogs.quotes import Quote
+from config import settings
 
 TIME_NOW = datetime.now()
-TOKEN = os.getenv('DISCORD_TOKEN')
+TOKEN = settings.DISCORD_TOKEN
 
 
 class PensaBot(commands.Bot):
-
-    def __init__(self, command_prefix, self_bot):
+    def __init__(self, command_prefix, self_bot, intents):
         commands.Bot.__init__(
-            self, command_prefix=command_prefix, self_bot=self_bot)
+            self, command_prefix=command_prefix, self_bot=self_bot, intents=intents
+        )
         self.add_event()
         self.add_commands()
+
 
     async def error_handler(self, command, error, ctx):
         with open('err.log', 'a') as f:
             f.write(
-                f"Erro no comando '{command}' - Erro: {error} - timestamp: {TIME_NOW}\n")
+                f"Erro no comando '{command}' - Erro: {error} - timestamp: {TIME_NOW}\n"
+            )
 
         message = self.controller.error_embed(
-            error="Cometemos um erro :/ - Contate algum ADM")
+            error='Cometemos um erro :/ - Contate algum ADM'
+        )
 
         await self.send_messages(message, ctx)
 
     def add_event(self):
         @self.event
         async def on_ready():
-            print("ON")
+            await self.add_cog(Quote(self))
+            print('ON')
 
         @self.event
         async def on_guild_join(guild):
-            general = find(lambda x: x.name ==
-                           'geral' or 'general',  guild.text_channels)
+            general = find(
+                lambda x: x.name == 'geral' or 'general', guild.text_channels
+            )
             if general and general.permissions_for(guild.me).send_messages:
-                await general.send('Olá {}! Por favor utilize o comando "?id" para configurar me configurar em seu servidor.'.format(guild.name))
+                await general.send(
+                    'Olá {}! Por favor utilize o comando "?id" para configurar me configurar em seu servidor.'.format(
+                        guild.name
+                    )
+                )
 
         @self.event
         async def on_error(event, *args, **kwargs):
             with open('err.log', 'a') as f:
-                f.write(f"Error: {args[0]} - timestamp: {TIME_NOW}\n")
+                f.write(f'Error: {args[0]} - timestamp: {TIME_NOW}\n')
 
         @self.event
         async def on_command_error(ctx, error):
             if error == CommandNotFound:
                 message = commands.error_embed(
-                    error="Comando não encontrado :/")
+                    error='Comando não encontrado :/'
+                )
                 await self.send_messages(message, ctx)
 
             if error == MissingRequiredArgument:
                 message = commands.error_embed(
-                    error="Falta algum parametro :C")
+                    error='Falta algum parametro :C'
+                )
                 await self.send_messages(message, ctx)
 
     def add_commands(self):
-        self.add_cog(Quote(self))
+        @self.command(name='saude', help='AAAA')
+        async def healthcheck(ctx):
+            """Adds two numbers together."""
+            await ctx.send("Jovem livre e selvagem")
 
 
 def main():
-    bot = PensaBot(command_prefix='?', self_bot=False)
+    intents = Intents.default()
+    intents.message_content = True
+    intents.members = True
+
+    bot = PensaBot(command_prefix='?', self_bot=False, intents=intents)
     bot.run(TOKEN)
