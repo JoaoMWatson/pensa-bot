@@ -13,7 +13,8 @@ registre suas frases e use sempre que quiser :D
 - [ ] Bug no comando "?pensa", não esta funcionando sem id
 - [ ] Comando "?pensador" não funciona sem aspas
 
-## NOVOS COMANDOS
+## NOVAS COISAS
 
 - [ ] Cog de timer
 - [ ] Cog de lembrete
+- [ ] Log de verdade(talvez usar proprio mongo para logs)
