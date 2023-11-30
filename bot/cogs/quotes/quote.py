@@ -3,7 +3,7 @@ from discord.ext import commands
 import bot.cogs.quotes.model as database
 from bot.cogs.quotes.controller import Controller
 
-
+# TASK - Melhorar mensagens de erro e respostas a comandos
 class Quote(commands.Cog):
     def __init__(self, bot):
         self.bot = bot
@@ -14,7 +14,7 @@ class Quote(commands.Cog):
             f.write(f"Erro no comando '{command}' - Erro: {error}\n")
 
         message = self.controller.error_embed(
-            error='Cometemos um erro :/ - Contate o ADM'
+            error='Verifique novamente o uso do comando. ?help <comando> para saber mais'
         )
 
         await self.send_messages(message, ctx)
@@ -43,7 +43,7 @@ class Quote(commands.Cog):
 
     @commands.command(
         name='pensa',
-        help='Frase aleatoria. Parametro<opt>: Frase respectiva ao id :D',
+        help='Trás uma frase aleatória caso não informe o id. Parâmetro<opcional>: Frase respectiva ao id',
     )
     async def pensa(self, ctx, pensamento_id=None):
         try:
@@ -59,7 +59,7 @@ class Quote(commands.Cog):
 
     @commands.command(
         name='pensador',
-        help='Listagem de frases desse autor. Parametro: nome do autor. ;)',
+        help='Listagem de frases desse autor. Parâmetro: nome do autor. ;)',
     )
     async def pensador(self, ctx, autor=None):
         try:
@@ -71,7 +71,7 @@ class Quote(commands.Cog):
 
     @commands.command(
         name='pensaram',
-        help='Registra novo pensamento. Parametro: "frase" "autor"',
+        help='Registra novo pensamento, necessário uso de aspas. Parâmetro: <"frase"> <"autor">',
     )
     async def pensaram(self, ctx, frase, autor):
         try:

@@ -1,5 +1,3 @@
-# import bot.database as database
-import os
 from datetime import datetime
 
 from discord import Intents
@@ -14,7 +12,7 @@ from config import settings
 TIME_NOW = datetime.now()
 TOKEN = settings.DISCORD_TOKEN
 
-
+# Melhorar help
 class PensaBot(commands.Bot):
     def __init__(self, command_prefix, self_bot, intents):
         commands.Bot.__init__(
@@ -40,8 +38,9 @@ class PensaBot(commands.Bot):
         @self.event
         async def on_ready():
             await self.add_cog(Quote(self))
-            print('ON')
+            print(f'ON - timestamp: {TIME_NOW}')
 
+        #TASK - não funciona Arrumar pfv
         @self.event
         async def on_guild_join(guild):
             general = find(
@@ -74,9 +73,9 @@ class PensaBot(commands.Bot):
                 await self.send_messages(message, ctx)
 
     def add_commands(self):
-        @self.command(name='saude', help='AAAA')
+        @self.command(name='status', help='Verifica o status do bot.')
         async def healthcheck(ctx):
-            """Adds two numbers together."""
+            """Verifica o status do bot."""
             await ctx.send("Jovem livre e selvagem")
 
 
