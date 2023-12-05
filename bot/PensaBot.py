@@ -23,7 +23,7 @@ class PensaBot(commands.Bot):
 
 
     async def error_handler(self, command, error, ctx):
-        with open('err.log', 'a') as f:
+        with open('./err.log', 'a') as f:
             f.write(
                 f"Erro no comando '{command}' - Erro: {error} - timestamp: {TIME_NOW}\n"
             )
@@ -43,20 +43,18 @@ class PensaBot(commands.Bot):
         #TASK - não funciona Arrumar pfv
         @self.event
         async def on_guild_join(guild):
-            general = find(
-                lambda x: x.name == 'geral' or 'general', guild.text_channels
-            )
+            print(f'Canais de texto - on guild join: {guild.text_channels}')
+            general = guild.text_channels[0]
             if general and general.permissions_for(guild.me).send_messages:
                 await general.send(
-                    'Olá {}! Por favor utilize o comando "?id" para configurar me configurar em seu servidor.'.format(
+                    'Olá {}! Por favor utilize o comando "?configura" para configurar me configurar em seu servidor.'.format(
                         guild.name
                     )
                 )
 
         @self.event
         async def on_error(event, *args, **kwargs):
-            with open('err.log', 'a') as f:
-                f.write(f'Error: {args[0]} - timestamp: {TIME_NOW}\n')
+            pass
 
         @self.event
         async def on_command_error(ctx, error):

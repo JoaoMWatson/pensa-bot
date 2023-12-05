@@ -11,14 +11,14 @@ class Controller:
 
     def pensa(self, id=None):
         if id == None:
-            _last_id = self.db.get_last_id()
-            id = random.randint(1, _last_id)
+            id = self.db.get_random_guild_quote_id()
+        
 
+        print(f'pensa: {id}')
         response = self.db.get_by_id(int(id))[0]
-
         embed = discord.Embed(
-            title=f'Autor: ' + response['author'].capitalize(),
-            description=f'"{response["quote"]}"',
+            description=f'Autor: ' + response['author'].capitalize(),
+            title=f'"{response["quote"]}"',
             color=random.choice(self._COLOR_SET),
         )
         embed.set_author(name='Pensamento', url='')
@@ -50,7 +50,8 @@ class Controller:
 
             return embed
         except Exception as e:
-            print(e)
+            return self.error_embed(error='Não foi possível retornar autor.')
+
 
     def pensaram(self, autor, frase):
         confirm = self.db.insert_new_quote(autor, frase)
@@ -64,13 +65,10 @@ class Controller:
             return embed_success
 
         else:
-            embed_error = discord.Embed(title='Tente novamente', color=0xFF000)
-            embed_error.set_author(name='Erro ao inserir frase :/')
-
-            return embed_error
+            self.error_embed(error='Não foi possível inserir a frase.')
 
     def error_embed(self, error):
         embed = discord.Embed(title=error, color=0xFF000)
-        embed.set_author(name='digite *?help* para ver a lista de comandos')
+        embed.set_author(name='Aconteceu um erro :/')
 
         return embed

@@ -1,17 +1,21 @@
+from datetime import datetime
+
 from discord.ext import commands
 
 import bot.cogs.quotes.model as database
 from bot.cogs.quotes.controller import Controller
 
+TIME_NOW = datetime.now()
+
 # TASK - Melhorar mensagens de erro e respostas a comandos
 class Quote(commands.Cog):
     def __init__(self, bot):
         self.bot = bot
-        self.controller = self.controller_injection('1179055434397659146')
+        self.controller = self.controller_injection('308728057164857354')
 
     async def error_handler(self, command, error, ctx):
-        with open('../../err.log', 'a') as f:
-            f.write(f"Erro no comando '{command}' - Erro: {error}\n")
+        with open('err.log', 'a') as f:
+            f.write(f"Erro no comando '{command}' - Erro: {error}\n - timestamp: {TIME_NOW}\n")
 
         message = self.controller.error_embed(
             error='Verifique novamente o uso do comando. ?help <comando> para saber mais'
@@ -27,14 +31,18 @@ class Quote(commands.Cog):
         controller_functions = Controller(
             dataAccess=database.DataAccess(guild_id)
         )
+        print(f'Controller injected for guild {guild_id}')
         return controller_functions
 
     @commands.command(
-        name='id', help='Comando de configuração para melhor uso do bot'
+        name='configura', help='Comando de configuração para melhor uso do bot'
     )
-    async def getguild(self, ctx):
+    async def get_guild(self, ctx):
         guild_id = ctx.message.guild.id
         self.controller = self.controller_injection(guild_id)
+
+        print(f'getGuild for guild {guild_id}')
+
 
         await ctx.channel.send(f'<@{ctx.author.id}>')
         await ctx.channel.send(

@@ -1,7 +1,5 @@
-import os
-
 from pymongo import DESCENDING, MongoClient
-
+import random
 from config import settings
 
 PASSWORD = settings.MONGO_PASSWORD
@@ -23,7 +21,7 @@ class DataAccess:
 
     def get_by_id(self, id):
         return list(
-            self.db.find({'public_id': id, 'guild': str(self.guild_id)})
+            self.db.find({'public_id': id})
         )
 
     def get_author_info(self, author):
@@ -31,11 +29,18 @@ class DataAccess:
             self.db.find({'author': str(author), 'guild': str(self.guild_id)})
         )
 
+    def get_random_guild_quote_id(self):
+        all_guild_quotes = list(self.db.find({'guild': str(self.guild_id)}, {'public_id': 1}))
+        
+        random_quote_id = random.choice(all_guild_quotes)['public_id']
+
+        return random_quote_id
+
     def get_last_id(self):
-        last = list(self.db.find().sort('public_id', DESCENDING).limit(1))[0][
+        query = list(self.db.find().sort('public_id', DESCENDING).limit(1))
+        return int(query[0][
             'public_id'
-        ]
-        return int(last)
+        ])
 
     def insert_new_quote(self, autor, frase):
         public_id = self.get_last_id() + 1
