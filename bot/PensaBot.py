@@ -9,6 +9,8 @@ from discord.utils import find
 from bot.cogs.quotes import Quote
 from config import settings
 
+import logging
+
 TIME_NOW = datetime.now()
 TOKEN = settings.DISCORD_TOKEN
 
@@ -21,18 +23,6 @@ class PensaBot(commands.Bot):
         self.add_event()
         self.add_commands()
 
-
-    async def error_handler(self, command, error, ctx):
-        with open('./err.log', 'a') as f:
-            f.write(
-                f"Erro no comando '{command}' - Erro: {error} - timestamp: {TIME_NOW}\n"
-            )
-
-        message = self.controller.error_embed(
-            error='Cometemos um erro :/ - Contate algum ADM'
-        )
-
-        await self.send_messages(message, ctx)
 
     def add_event(self):
         @self.event
@@ -51,10 +41,6 @@ class PensaBot(commands.Bot):
                         guild.name
                     )
                 )
-
-        @self.event
-        async def on_error(event, *args, **kwargs):
-            pass
 
         @self.event
         async def on_command_error(ctx, error):
@@ -78,9 +64,10 @@ class PensaBot(commands.Bot):
 
 
 def main():
+    handler = logging.FileHandler(filename='discord.log', encoding='utf-8', mode='w')
     intents = Intents.default()
     intents.message_content = True
     intents.members = True
 
     bot = PensaBot(command_prefix='?', self_bot=False, intents=intents)
-    bot.run(TOKEN)
+    bot.run(TOKEN, log_handler=handler)

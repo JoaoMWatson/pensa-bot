@@ -10,20 +10,21 @@ class Controller:
         self.db = dataAccess
 
     def pensa(self, id=None):
-        if id == None:
-            id = self.db.get_random_guild_quote_id()
-        
+        try:
+            if id == None:
+                id = self.db.get_random_guild_quote_id()
+            
+            response = self.db.get_by_id(int(id))[0]
+            embed = discord.Embed(
+                description=f'Autor: ' + response['author'].capitalize(),
+                title=f'"{response["quote"]}"',
+                color=random.choice(self._COLOR_SET),
+            )
+            embed.set_author(name='Pensamento', url='')
 
-        print(f'pensa: {id}')
-        response = self.db.get_by_id(int(id))[0]
-        embed = discord.Embed(
-            description=f'Autor: ' + response['author'].capitalize(),
-            title=f'"{response["quote"]}"',
-            color=random.choice(self._COLOR_SET),
-        )
-        embed.set_author(name='Pensamento', url='')
-
-        return embed
+            return embed
+        except Exception as e:
+            return self.error_embed(error='Não foi possível retornar frase desejada.')
 
     def pensador(self, autor):
         try:

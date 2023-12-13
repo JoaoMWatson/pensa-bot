@@ -13,10 +13,7 @@ class Quote(commands.Cog):
         self.bot = bot
         self.controller = self.controller_injection('308728057164857354')
 
-    async def error_handler(self, command, error, ctx):
-        with open('err.log', 'a') as f:
-            f.write(f"Erro no comando '{command}' - Erro: {error}\n - timestamp: {TIME_NOW}\n")
-
+    async def error_handler(self, ctx):
         message = self.controller.error_embed(
             error='Verifique novamente o uso do comando. ?help <comando> para saber mais'
         )
